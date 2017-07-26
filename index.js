@@ -1,15 +1,17 @@
-require('dotenv').config();
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const app = express();
+require('dotenv').config();
 
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(bodyParser.json());
 
-var db;
-var user = process.env.DB_USER;
-var pass = process.env.DB_PASS;
+var
+  user = process.env.DB_USER,
+  pass = process.env.DB_PASS,
+  db;
 
 MongoClient.connect('mongodb://' + user + ':' + pass + '@ds125053.mlab.com:25053/some-quotes', (err,database) => {
   if (err) return console.log(err);
@@ -23,10 +25,22 @@ MongoClient.connect('mongodb://' + user + ':' + pass + '@ds125053.mlab.com:25053
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+/*
+.save(req.body, (err,res) => {});
+.find({key:'val'}).toArray((err,res) => {});
+.findOneAndUpdate(
+  query,
+  update,
+  options,
+  callback
+);
+
+.findOneAndDelete();
+*/
 
 
 app.get('/', (req,res) => {
-  var cursor = db.collection('posts').find().toArray((err,results) => {
+  var cursor = db.collection('posts').find().toArray((err, results) => {
     // console.log(results);
 
     res.render('index', {posts: results});
@@ -42,4 +56,10 @@ app.post('/posts', (req,res) => {
     console.log('Saved to database');
     res.redirect('/');
   })
+});
+
+app.put('/posts', (req,res) => {
+  db.collection('posts').findOneAndUpdate()
+  console.log(req.body.title);
+  console.log(req.body.body);
 });
