@@ -7,24 +7,25 @@
     <ul>
       <% for (let i=0; i < posts.length; i++) { %>
         <li class="posts">
-          <span><%= posts[i].title %></span>
-          <span><%= posts[i].body %></span>
+          <span key-id="<%= i %>" class="title"><%= posts[i].title %> - </span>
+          <span key-id="<%= i %>" class="body"><%= posts[i].body %></span>
         </li>
       <% }%>
     </ul>
 
-    <form action='/posts' method='POST'>
-      <input type='text' name='title'>
-      <input type='text' name='body'>
+    <form class="form" action='/posts' method='POST'>
+      <input type='text' placeholder="Title" name='title'>
+      <input type='text' placeholder="Body" name='body'>
       <button type='submit'>Submit</button>
     </form>
 
-    <div>
-      <h2>This button will change the last quote!</h2>
-      <button id="update"> ALTER </button>
-    </div>
-
   </main>
+
+  <div class="options">
+    <h2>Update button will replace posts that have the Title: "hello"</h2>
+    <button id="update">UPDATE</button>
+    <button id="delete">DELETE</button>
+  </div>
 
   <footer>
     <%- include partials/footer %>

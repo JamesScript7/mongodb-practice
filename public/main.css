@@ -1,0 +1,56 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+main {
+  width: 600px;
+  margin: 0 auto;
+  padding: 10px 0px 150px 0px;
+}
+
+ul {
+  padding-left: 0px;
+}
+
+li {
+  list-style-type: none;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid aliceblue;
+}
+
+.form {
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.body {
+  color: darkgrey;
+}
+
+/*#delete {
+  float: right;
+}*/
+
+button {
+  padding: 10px;
+  margin: 4px;
+}
+
+.options {
+  position: fixed;
+  bottom: 0px;
+  padding: 30px;
+  width: 100%;
+  background-color: aliceblue;
+  text-align: center;
+}

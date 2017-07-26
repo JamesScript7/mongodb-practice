@@ -63,22 +63,32 @@ app.post('/posts', (req,res) => {
 });
 
 app.put('/posts', (req,res) => {
-  db.collection('posts').findOneAndUpdate(
-    {
-      title: "hi"
-    },
-    {
-      $set: {
-        title: req.body.title,
-        body: req.body.body
-      }
-    }, {
-      sort: {_id: -1},
-      upsert: true
-    }, (err, result) => {
-      if (err) throw err;
-      res.send(result);
+  db.collection('posts').findOneAndUpdate({
+    title: "hello"
+  },
+  {
+    $set: {
+      title: req.body.title,
+      body: req.body.body
     }
-  );
+  }, {
+    sort: {_id: -1},
+    upsert: true
+  }, (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  }
 
+);
+
+});
+
+app.delete('/posts', (req,res) => {
+  console.log(req.body);
+  db.collection('posts').findOneAndDelete({
+    title: req.body.title
+  }, (err, result) => {
+    if (err) return res.send(500,err);
+    res.send({message: "The quote got deleted!"});
+  });
 });
