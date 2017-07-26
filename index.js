@@ -31,7 +31,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 .findOneAndUpdate(
   query,
   update,
-  options,
+  {
+    // Will look at the latest
+    sort: {_id: -1},
+    // If it doesn't exist, still .save()
+    upsert: true
+  },
   callback
 );
 
@@ -41,7 +46,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req,res) => {
   var cursor = db.collection('posts').find().toArray((err, results) => {
-    // console.log(results);
 
     res.render('index', {posts: results});
   });
@@ -59,7 +63,22 @@ app.post('/posts', (req,res) => {
 });
 
 app.put('/posts', (req,res) => {
-  db.collection('posts').findOneAndUpdate()
-  console.log(req.body.title);
-  console.log(req.body.body);
+  db.collection('posts').findOneAndUpdate(
+    {
+      title: "hi"
+    },
+    {
+      $set: {
+        title: req.body.title,
+        body: req.body.body
+      }
+    }, {
+      sort: {_id: -1},
+      upsert: true
+    }, (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    }
+  );
+
 });
