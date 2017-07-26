@@ -1,0 +1,26 @@
+<%- include partials/globals/head %>
+  <nav>
+    <%- include partials/header %>
+  </nav>
+
+  <main>
+    <ul>
+      <% for (let i=0; i < posts.length; i++) { %>
+        <li class="posts">
+          <span><%= posts[i].title %></span>
+          <span><%= posts[i].body %></span>
+        </li>
+      <% }%>
+    </ul>
+
+    <form action='/posts' method='POST'>
+      <input type='text' name='title'>
+      <input type='text' name='body'>
+      <button type='submit'>Submit</button>
+    </form>
+  </main>
+
+  <footer>
+    <%- include partials/footer %>
+  </footer>
+<%- include partials/globals/foot %>
