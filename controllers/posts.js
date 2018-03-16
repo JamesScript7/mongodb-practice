@@ -2,7 +2,8 @@ const model = require('../models/posts');
 
 // GET
 module.exports.get = function(req,res) {
-  var cursor = model.db.collection('posts').find().toArray((err, results) => {
+  model.db.collection('posts').find().toArray((err, results) => {
+    if (err) throw err;
 
     res.render('index', {posts: results});
   });
@@ -39,7 +40,7 @@ module.exports.put = function(req,res) {
 
 // DELETE
 module.exports.delete = function(req,res) {
-  console.log(req.body);
+  // console.log(req.body);
   model.db.collection('posts').findOneAndDelete({
     title: req.body.title
   }, (err, result) => {

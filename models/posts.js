@@ -9,6 +9,7 @@ var
 MongoClient.connect('mongodb://' + user + ':' + pass + '@ds125053.mlab.com:25053/some-quotes', (err,database) => {
   if (err) return console.log(err);
   db = database;
+  // db = database.db(''); // database name. Maybe make a quote creator?
   module.exports.db = database;
 
   app.listen(3000, () => {
