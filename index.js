@@ -1,29 +1,23 @@
+// REQUIRES:
 const express = require('express');
 const bodyParser = require('body-parser');
-const MongoClient = require('mongodb').MongoClient;
-const app = express();
-require('dotenv').config();
 
+const app = express();
+
+// MIDDLEWARES:
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.json());
-
-var
-  user = process.env.DB_USER,
-  pass = process.env.DB_PASS,
-  db;
-
-MongoClient.connect('mongodb://' + user + ':' + pass + '@ds125053.mlab.com:25053/some-quotes', (err,database) => {
-  if (err) return console.log(err);
-  db = database;
-
-  app.listen(3000, () => {
-    console.log('Listening on port 3000');
-  });
-});
-
-
 app.use(bodyParser.urlencoded({extended: true}));
+
+// CONTROLLERS:
+const postsController = require('./controllers/posts');
+
+// ROUTES:
+app.get('/', postsController.get);
+app.post('/posts', postsController.post);
+app.put('/posts', postsController.put);
+app.delete('/posts', postsController.delete);
 
 /*
 .save(req.body, (err,res) => {});
@@ -42,53 +36,3 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 .findOneAndDelete();
 */
-
-
-app.get('/', (req,res) => {
-  var cursor = db.collection('posts').find().toArray((err, results) => {
-
-    res.render('index', {posts: results});
-  });
-
-  // res.sendFile(__dirname + '/index.html');
-});
-
-app.post('/posts', (req,res) => {
-  db.collection('posts').save(req.body, (err, result) => {
-    if (err) return console.log(err);
-
-    console.log('Saved to database');
-    res.redirect('/');
-  })
-});
-
-app.put('/posts', (req,res) => {
-  db.collection('posts').findOneAndUpdate({
-    title: "hello"
-  },
-  {
-    $set: {
-      title: req.body.title,
-      body: req.body.body
-    }
-  }, {
-    sort: {_id: -1},
-    upsert: true
-  }, (err, result) => {
-    if (err) throw err;
-    res.send(result);
-  }
-
-);
-
-});
-
-app.delete('/posts', (req,res) => {
-  console.log(req.body);
-  db.collection('posts').findOneAndDelete({
-    title: req.body.title
-  }, (err, result) => {
-    if (err) return res.send(500,err);
-    res.send({message: "The quote got deleted!"});
-  });
-});
